@@ -45,16 +45,15 @@ int NombreCles (Arbre234 a) {
 int CleMax (Arbre234 a)
 {
   if (a == NULL) return -1;
-  
+
   Arbre234 current = a;
-  Arbre234 pred = NULL;
-  while (a != NULL)
+
+  while (current->fils[current->t] != NULL)
   {
-    pred = a;
-    current = current->fils[a->t+1];
+    current = current->fils[current->t];
   }
-  
-  return pred->cles[pred->t] ;
+
+  return current->cles[current->t - 1] ;
 }
 
 int CleMin (Arbre234 a)
