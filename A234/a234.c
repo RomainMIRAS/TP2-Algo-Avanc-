@@ -26,10 +26,10 @@ int hauteur (Arbre234 a)
 } 
 
 int NombreClesWorker(Arbre234 a, int nbCle) {
-  if (a->t == 0) {
+  if (a == NULL || a->t == 0) {
     return 0;
   } else {
-    return a->t + NombreClesWorker(a->fils [0], 0) + NombreClesWorker(a->fils [1], 0) + NombreClesWorker(a->fils [2], 0) + NombreClesWorker(a->fils [3], 0);
+    return a->t - 1 + NombreClesWorker(a->fils [0], 0) + NombreClesWorker(a->fils [1], 0) + NombreClesWorker(a->fils [2], 0) + NombreClesWorker(a->fils [3], 0);
   }
 }
 
