@@ -2,7 +2,74 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "a234.h"
+#ifndef __A234_H__
+  #define __A234_H__
+  #include "a234.h"
+#endif
+
+#define MAX_FILE_SIZE       32
+////////////////////////////////////////////////////////////
+
+/// FILE
+
+///////////////////////////////////////////////////////////*
+
+typedef struct {
+  int tete ;
+  int queue ;
+  Arbre234 Tab [MAX_FILE_SIZE] ;
+} file_t, *pfile_t ;
+
+pfile_t creer_file ()
+{
+  pfile_t f = (pfile_t) malloc (sizeof (file_t));
+  if (f == NULL)
+    return NULL;
+
+  //Set tab à nulle
+  for (int i = 0; i < MAX_FILE_SIZE; i++)
+    f->Tab[i] = NULL;
+  f->tete = 0;
+  f->queue = 0;
+  return f;
+
+}
+
+int detruire_file (pfile_t f)
+{  
+  if (f == NULL)
+    return -1;
+  free (f);
+  return 0;
+}
+
+int file_vide (pfile_t f)
+{
+  return (f->tete == f->queue);
+}
+
+int file_pleine (pfile_t f)
+  {
+  return (f->tete == (f->queue + 1) % (MAX_FILE_SIZE+1));
+  }
+
+Arbre234 defiler (pfile_t f)
+  {
+  if (file_vide (f))
+    return NULL;
+  f->tete = (f->tete + 1) % (MAX_FILE_SIZE+1);
+  return f->Tab[f->tete];
+  }
+
+int enfiler (pfile_t f, Arbre234 p)
+{
+  if (file_pleine (f))
+    return -1;
+  f->queue = (f->queue + 1) % (MAX_FILE_SIZE+1);
+  f->Tab[f->queue] = p;
+  return 0;
+}
+
 
 #define max(a,b) ((a)>(b)?(a):(b))
 
@@ -143,10 +210,47 @@ Arbre234 noeud_max (Arbre234 a)
 
 void Afficher_Cles_Largeur (Arbre234 a)
 {
-  /*
-    Afficher le cles de l'arbre a avec
-    un parcours en largeur
-  */
+
+  pfile_t f = creer_file();
+
+  enfiler(f,a);
+
+  while(!file_vide(f)){
+    Arbre234 noeud = defiler(f);
+    if(noeud->t != 0){
+
+      if (noeud->t == 2){
+        printf("%d ",noeud->cles[1]);
+      } else {
+        for(int i = 0; i < noeud->t-1; i++){
+        printf("%d ",noeud->cles[i]);
+      }
+      }
+      printf("\n");
+      switch (noeud->t)
+      {
+      case 2:
+        enfiler(f,noeud->fils[1]);
+        enfiler(f,noeud->fils[2]);
+        break;
+      case 3:
+        enfiler(f,noeud->fils[0]);
+        enfiler(f,noeud->fils[1]);
+        enfiler(f,noeud->fils[2]);
+        break;
+      case 4:
+        enfiler(f,noeud->fils[0]);
+        enfiler(f,noeud->fils[1]);
+        enfiler(f,noeud->fils[2]);
+        enfiler(f,noeud->fils[3]);
+        break;
+      default:
+        break;
+      }
+    }
+  }
+
+  detruire_file(f);
 
   return ;
 }
@@ -226,4 +330,13 @@ int main (int argc, char **argv)
     printf("Noeud 2 : %d\n", noeud2);
     printf("Noeud 3 : %d\n", noeud3);
     printf("Noeud 4 : %d\n", noeud4);
+
+    printf ("==== Noeud Max ====\n") ;
+
+    afficher_arbre (noeud_max(a), 0) ;
+
+    printf ("==== Affichage Cles Largeur ====\n") ;
+
+    Afficher_Cles_Largeur(a);
+
 }
