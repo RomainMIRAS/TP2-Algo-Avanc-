@@ -48,12 +48,11 @@ int CleMax (Arbre234 a)
 
   Arbre234 current = a;
 
-  while (current->fils[current->t] != NULL)
+  while (current->fils[current->t] != NULL && current->fils[current->t]->t != 0)
   {
     current = current->fils[current->t];
   }
-
-  return current->cles[current->t - 1] ;
+  return current->cles[current->t-1];
 }
 
 int CleMin (Arbre234 a)
@@ -62,7 +61,7 @@ int CleMin (Arbre234 a)
 
   Arbre234 current = a;
 
-  while (current->fils[0] != NULL)
+  while (current->fils[0] != NULL && current->fils[0]->t != 0)
   {
     current = current->fils[0];
   }
