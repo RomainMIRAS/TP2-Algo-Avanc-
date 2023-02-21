@@ -44,20 +44,31 @@ int NombreCles (Arbre234 a) {
 
 int CleMax (Arbre234 a)
 {
-  /*
-     plus grande cle de l'arbre a
-  */
-  
-  return 0 ;
+  if (a == NULL) return -1;
+
+  Arbre234 current = a;
+
+  while (current->fils[current->t] != NULL)
+  {
+    current = current->fils[current->t];
+  }
+
+  return current->cles[current->t - 1] ;
 }
 
 int CleMin (Arbre234 a)
 {
-  /*
-     Retourne plus petite cle de l'arbre a
-  */
+  if (a == NULL) return -1;
 
-  return 0 ;
+  Arbre234 current = a;
+
+  while (current->fils[0] != NULL)
+  {
+    current = current->fils[0];
+  }
+
+  return current->cles[0] ;
+
 }
 
 Arbre234 RechercherCle (Arbre234 a, int cle)
@@ -141,10 +152,20 @@ int main (int argc, char **argv)
 
   a = lire_arbre (argv [1]) ;
 
-  printf("nombre de cle : %d", NombreCles(a));
-
   printf ("==== Afficher arbre ====\n") ;
   
   afficher_arbre (a, 0) ;
+
+    printf ("==== Nombre de Clé arbre ====\n") ;
+
+    printf("Nombre de cle : %d\n", NombreCles(a));
+
+    printf ("==== MIN MAX ====\n") ;
+
+    printf("MIN : %d\n", CleMin(a));
+
+    printf("MAX : %d\n", CleMax(a));
+
+    printf ("==== Hauteur arbre ====\n") ;
 
 }
