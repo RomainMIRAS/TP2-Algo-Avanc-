@@ -107,13 +107,59 @@ void AnalyseStructureArbre (Arbre234 a, int *feuilles, int *noeud2, int *noeud3,
   */
 }
 
-Arbre234 noeud_max (Arbre234 a)
-{
-  /*
-    Retourne le noeud avec la somme maximale des cles internes
-  */
+int sommeNoeud (Arbre234 a) {
+  switch (a->t)
+  {
+  case 0:
+    return 0;
   
-  return NULL ;
+  case 2:
+    return a->cles[1];
+
+    case 3:
+    return a->cles[1] + a->cles[0];
+
+    case 4:
+    return a->cles[1] + a->cles[0] + a->cles[2];
+
+
+  default:
+    return 0;
+  }
+}
+
+Arbre234 noeud_max_worker (Arbre234 a, Arbre234 currentMax, int value) {
+
+  if (a == NULL) {
+    return currentMax;
+  }
+
+  if (a->t > 3) { // Ici on gère tout les fils 3
+
+  }
+
+  if (a->t > 2) { // Ici on gère tout les fils 0
+
+  }
+
+  if (a->t > 0) { // Ici on gère tout les fils 1 et 2
+
+  }
+
+  if (a->t == 0) {
+    return currentMax;
+  }
+
+  return NULL;
+
+}
+
+Arbre234 noeud_max (Arbre234 a) {
+  if (a->t == 0) {
+    return 0;
+  } else {
+    return noeud_max_worker(a, a, sommeNoeud(a));
+  }
 }
 
 
