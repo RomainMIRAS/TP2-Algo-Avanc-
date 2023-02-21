@@ -153,10 +153,20 @@ int main (int argc, char **argv)
 
   a = lire_arbre (argv [1]) ;
 
-  printf("nombre de cle : %d", NombreCles(a));
-
   printf ("==== Afficher arbre ====\n") ;
   
   afficher_arbre (a, 0) ;
+
+    printf ("==== Nombre de Clé arbre ====\n") ;
+
+    printf("Nombre de cle : %d\n", NombreCles(a));
+
+    printf ("==== MIN MAX ====\n") ;
+
+    printf("MIN : %d\n", CleMin(a));
+
+    printf("MAX : %d\n", CleMax(a));
+
+    printf ("==== Hauteur arbre ====\n") ;
 
 }
