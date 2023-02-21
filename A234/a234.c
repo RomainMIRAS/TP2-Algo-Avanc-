@@ -25,13 +25,21 @@ int hauteur (Arbre234 a)
   return 1 + max (max (h0,h1),max (h2,h3)) ;
 } 
 
-int NombreCles (Arbre234 a)
-{
-  /*
-     Retourne le nombre de cles presentes dans l'arbre a
-  */
+int NombreClesWorker(Arbre234 a, int nbCle) {
+  if (a->t == 0) {
+    return 0;
+  } else {
+    return a->t + NombreClesWorker(a->fils [0], 0) + NombreClesWorker(a->fils [1], 0) + NombreClesWorker(a->fils [2], 0) + NombreClesWorker(a->fils [3], 0);
+  }
+}
+
+int NombreCles (Arbre234 a) {
   
-  return 0 ;
+  if (a->t == 0) {
+    return 0;
+  } else {
+    return NombreClesWorker(a, 0);
+  }
 }
 
 int CleMax (Arbre234 a)
@@ -132,6 +140,8 @@ int main (int argc, char **argv)
     }
 
   a = lire_arbre (argv [1]) ;
+
+  printf("nombre de cle : %d", NombreCles(a));
 
   printf ("==== Afficher arbre ====\n") ;
   
