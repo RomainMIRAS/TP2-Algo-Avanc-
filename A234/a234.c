@@ -102,9 +102,33 @@ Arbre234 RechercherCle (Arbre234 a, int cle) { //42 lignes
 
 void AnalyseStructureArbre (Arbre234 a, int *feuilles, int *noeud2, int *noeud3, int *noeud4)
 {
-  /* 
-     calculer le nombre de feuilles, de 2-noeuds, 3-noeuds,et 4-noeuds
-  */
+  if (a->t == 0) {
+    *feuilles += 1; 
+  } else {
+    switch (a->t)
+    {
+    case 2:
+    *noeud2 += 1;
+    AnalyseStructureArbre(a->fils[1],feuilles,noeud2,noeud3,noeud4);
+    AnalyseStructureArbre(a->fils[2],feuilles,noeud2,noeud3,noeud4);
+      break;
+    case 3:
+    *noeud3 += 1;
+            AnalyseStructureArbre(a->fils[0],feuilles,noeud2,noeud3,noeud4);
+        AnalyseStructureArbre(a->fils[1],feuilles,noeud2,noeud3,noeud4);
+    AnalyseStructureArbre(a->fils[2],feuilles,noeud2,noeud3,noeud4);
+      break;
+    case 4:
+    *noeud4 += 1; 
+        AnalyseStructureArbre(a->fils[0],feuilles,noeud2,noeud3,noeud4);
+    AnalyseStructureArbre(a->fils[1],feuilles,noeud2,noeud3,noeud4);
+        AnalyseStructureArbre(a->fils[2],feuilles,noeud2,noeud3,noeud4);
+    AnalyseStructureArbre(a->fils[3],feuilles,noeud2,noeud3,noeud4);
+      break;
+    default:
+      break;
+    }
+  }
 }
 
 int sommeNoeud (Arbre234 a) {
@@ -231,8 +255,21 @@ int main (int argc, char **argv)
 
     printf("MAX : %d\n", CleMax(a));
 
+      printf ("==== Recherche Cle arbre ====\n") ;
+
     afficher_arbre (RechercherCle(a, 82), 0) ;
 
-    printf ("==== Hauteur arbre ====\n") ;
+    printf ("==== Analyse Syntax ====\n") ;
 
+    int feuille = 0;
+    int noeud2 = 0;
+    int noeud3 = 0;
+    int noeud4 = 0;
+
+    AnalyseStructureArbre(a,&feuille,&noeud2,&noeud3,&noeud4);
+
+    printf("Feuille : %d\n", feuille);
+    printf("Noeud 2 : %d\n", noeud2);
+    printf("Noeud 3 : %d\n", noeud3);
+    printf("Noeud 4 : %d\n", noeud4);
 }
