@@ -36,20 +36,32 @@ int NombreCles (Arbre234 a)
 
 int CleMax (Arbre234 a)
 {
-  /*
-     plus grande cle de l'arbre a
-  */
+  if (a == NULL) return -1;
   
-  return 0 ;
+  Arbre234 current = a;
+  Arbre234 pred = NULL;
+  while (a != NULL)
+  {
+    pred = a;
+    current = current->fils[a->t+1];
+  }
+  
+  return pred->cles[pred->t] ;
 }
 
 int CleMin (Arbre234 a)
 {
-  /*
-     Retourne plus petite cle de l'arbre a
-  */
+  if (a == NULL) return -1;
 
-  return 0 ;
+  Arbre234 current = a;
+
+  while (current->fils[0] != NULL)
+  {
+    current = current->fils[0];
+  }
+
+  return current->cles[0] ;
+
 }
 
 Arbre234 RechercherCle (Arbre234 a, int cle)
