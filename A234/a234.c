@@ -140,6 +140,12 @@ int empiler (ppile_t p, Arbre234 pn)
 #define max(a,b) ((a)>(b)?(a):(b))
 
 
+////////////////////////////////////////////////////////////
+
+/// ARBRE 234
+
+///////////////////////////////////////////////////////////*
+
 int hauteur (Arbre234 a)
 {
   int h0, h1, h2, h3 ;
@@ -464,6 +470,9 @@ Arbre234 getFather(Arbre234 a, int cle){
         } else {
           return getFather(a->fils[0],cle) != NULL ? getFather(a->fils[0],cle) : getFather(a->fils[1],cle) != NULL ? getFather(a->fils[1],cle) : getFather(a->fils[2],cle) != NULL ? getFather(a->fils[2],cle) : getFather(a->fils[3],cle);
         }
+        break;
+      default:
+        return NULL;
     } 
   }
 }
@@ -471,11 +480,20 @@ Arbre234 getFather(Arbre234 a, int cle){
 
 void Detruire_Cle (Arbre234 *a, int cle)
 {
-  /*
-    retirer la cle de l'arbre a
+  /**
+   * Cas 1 : Clé à détruire est dans un nœud feuille avec plus de deux clés
+    Cas 2 : Clé à détruire est dans un nœud interne
+    - Plusieurs sous-cas
+    Cas 3 : Clé à détruire est dans un nœud feuille
+    avec une seule clé
+    - Plusieurs sous-cas
   */
 
-  return ;
+  Arbre234 arbre = *a;
+  Arbre234 father = getFather(arbre,cle);
+
+  RechercherCle(arbre,cle);
+  return;
 }
 
 
