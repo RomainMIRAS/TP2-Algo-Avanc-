@@ -22,5 +22,9 @@ void afficher_arbre (Arbre234 a, int niveau) ;
 void ajouter_cle (Arbre234 *a, int cle, int niveau, Arbre234 pere) ;
 
 Arbre234 getFather(Arbre234 a, int cle) ;
+
+void Detruire_Cle (Arbre234 *a, int cle);
+
+int est_feuille (Arbre234 a) ;
   
 // Arbre234 Fusion (Arbre234 arbre) ;

@@ -403,23 +403,96 @@ Arbre234 getFather(Arbre234 a, int cle){
   }
 }
 
+int est_feuille (Arbre234 a){
+  if (a->t == 0){
+    return 1;
+  } else {
+    switch (a->t)
+      {
+      case 2:
+        return est_feuille(a->fils[1]) && est_feuille(a->fils[2]);
+        break;
+      case 3:
+        return est_feuille(a->fils[0]) && est_feuille(a->fils[1]) && est_feuille(a->fils[2]);
+        break;
+      case 4:
+        return est_feuille(a->fils[0]) && est_feuille(a->fils[1]) && est_feuille(a->fils[2]) && est_feuille(a->fils[3]);
+        break;
+      default:
+        return 0;
+    } 
+  }
+}
+
+void retirer_cle(Arbre234 a, int cle){
+  if (a->t == 0){
+    return;
+  } else {
+    switch (a->t)
+      {
+      case 2:
+        if (cle == a->cles[1]){
+          a->cles[1] = a->cles[2];
+          a->cles[2] = 0;
+          a->t = 1;
+        }
+        break;
+      case 3:
+        if (cle == a->cles[0]){
+          a->cles[0] = a->cles[1];
+          a->cles[1] = a->cles[2];
+          a->cles[2] = 0;
+          a->t = 2;
+        } else if (cle == a->cles[1]){
+          a->cles[1] = a->cles[2];
+          a->cles[2] = 0;
+          a->t = 2;
+        }
+        break;
+      case 4:
+        if (cle == a->cles[0]){
+          a->cles[0] = a->cles[1];
+          a->cles[1] = a->cles[2];
+          a->cles[2] = a->cles[3];
+          a->cles[3] = 0;
+          a->t = 3;
+        } else if (cle == a->cles[1]){
+          a->cles[1] = a->cles[2];
+          a->cles[2] = a->cles[3];
+          a->cles[3] = 0;
+          a->t = 3;
+        } else if (cle == a->cles[2]){
+          a->cles[2] = a->cles[3];
+          a->cles[3] = 0;
+          a->t = 3;
+        }
+        break;
+      default:
+        return;
+    } 
+  }
+}
 
 void Detruire_Cle (Arbre234 *a, int cle)
 {
-  /**
-   * Cas 1 : Clé à détruire est dans un nœud feuille avec plus de deux clés
-    Cas 2 : Clé à détruire est dans un nœud interne
-    - Plusieurs sous-cas
-    Cas 3 : Clé à détruire est dans un nœud feuille
-    avec une seule clé
-    - Plusieurs sous-cas
-  */
+  Arbre234 arbre = RechercherCle(*a,cle);
+  // Arbre234 father = getFather(a,cle);
 
-  Arbre234 arbre = *a;
-  Arbre234 father = getFather(arbre,cle);
+  if (arbre->t == 0){
+    printf("Cle non trouvee\n");
+    printf("Cle %d supprimee\n",cle);
+  } else if (arbre->t > 2 && est_feuille(arbre)){ 
+    // Cas 1 : Clé à détruire est dans un nœud feuille avec plus de deux clés
+      retirer_cle(arbre,cle);
+      printf("Cle %d supprimee\n",cle);
+  } else if (arbre->t == 2 && est_feuille(arbre)){ 
+        // Cas 2 : Clé à détruire est dans un nœud feuille une clé
 
-  RechercherCle(arbre,cle);
-  return;
+        // On fait remonter son frére inf dans dans le nœud père, la clé de son inf descend dans le nœud avec la
+        //clé 
+
+        // On va détruire la cle dans le nœud, on se retrouve dans le cas 1
+  }
 }
 
 
@@ -487,6 +560,8 @@ int main (int argc, char **argv)
 
     printf ("==== Destruction Cle ====\n") ;
 
-    //Detruire_Cle(&a, 82);
+    Detruire_Cle(&a, CleMin(a));
+
+    afficher_arbre (a, 0) ;
 
 }
