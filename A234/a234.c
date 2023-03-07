@@ -420,85 +420,94 @@ void Affichage_Cles_Triees_Recursive (Arbre234 a)
      
 }
 
-void Affichage_Cles_Triees_NonRecursive (Arbre234 a)
-{
-    /* 
-     Afficher les cles en ordre croissant
-     Cette fonction ne sera pas recursive
-     Utiliser une pile
-  */
+int filsDroit(Arbre234 a) {
+  return a->t == 2 || a->t == 3 ? 2 : 3;
+}
 
+void printAllCle(Arbre234 a) {
+  switch (a->t) {
+    case 2:
+      printf("valeur : %d\n", a->cles[1]);
+      break;
+    case 3:
+    case 4:
+    for (int i = 0; i < a->t - 1; i++)
+      printf("valeur : %d\n", a->cles[i]);
+  }
+}
+
+void Affichage_Cles_Triees_NonRecursive (Arbre234 a) {
+  int max = CleMax(a);
   ppile_t pile = creer_pile();
+
   while (a != NULL) {
     switch(a->t) {
       case 2:
-      empiler(pile, a);
-      a = a->fils[1];
-      break;
+        empiler(pile, a);
+        a = a->fils[1];
+        break;
       case 3:
-      empiler(pile, a);
-      a = a->fils[0];
-      break;
       case 4:
-      empiler(pile, a);
-      a = a->fils[0];
-      break;
+        empiler(pile, a);
+        a = a->fils[0];
+        break;
       case 0:
-      a = NULL;
-
+        a = NULL;
     }
   }
 
-  while (!pile_vide(pile)) {
-    Arbre234 noeud = depiler(pile);
-    Arbre234 temp;
-    
-    switch (noeud->t)
-      {
-      case 2:
-      printf("valeur : %d\n", noeud->cles[1]);
-      temp = noeud->fils[2];
-      empiler(pile,temp);
-        break;
-      case 3:
-      printf("valeur : %d\n", noeud->cles[0]);
-      temp = noeud->fils[2];
-      empiler(pile,temp);
-      temp = noeud->fils[1];
-      empiler(pile,temp);
-        break;
-      case 4:
-      printf("valeur : %d\n", noeud->cles[0]);
-      temp = noeud->fils[3];
-      empiler(pile,temp);
-      temp = noeud->fils[2];
-      empiler(pile,temp);
-      temp = noeud->fils[1];
-      empiler(pile,temp);
-    }
+  int decalageDroite;
+  int finished = 0;
 
-    while (noeud->fils[0] != NULL || noeud->fils[1] != NULL) {
-      switch (noeud->t){
-      case 2:
-      noeud = noeud->fils[1];
-      empiler(pile,noeud);
-      break;
-      case 3:
-      noeud = noeud->fils[0];
-      empiler(pile,noeud);
-      break;
-      case 4:
-      noeud = noeud->fils[0];
-      empiler(pile,noeud);
-      break;
+  Arbre234 previous;
+  Arbre234 noeud = depiler(pile);
+  
+  printAllCle(noeud);
+
+  while (!pile_vide(pile) && !finished) {
+    previous = noeud;
+    noeud = depiler(pile);
+
+    decalageDroite = 0;
+
+    if (previous->cles[previous->t-2] == max) {
+      finished = 1;
+      printAllCle(noeud);
+    } else {
+      int filsVisee = -1;
+      for (int i = 0; i < 3 && noeud->fils[filsDroit(noeud)] != previous; i++)
+        filsVisee = previous ==  noeud->fils[i] ? i : filsVisee;
+
+      if (filsVisee != -1) {
+        printf("valeur : %d\n", noeud->cles[filsVisee]);
+        empiler(pile, noeud);
+        empiler(pile,noeud->fils[filsVisee+1]);
+        noeud = noeud->fils[filsVisee+1];
+        decalageDroite = 1;
+      } else {
+        if (noeud->fils[filsDroit(noeud)] != previous)
+          printAllCle(noeud);
       }
       
+      while (noeud->fils[1]->t != 0 && decalageDroite) {
+        switch(noeud->t) {
+          case 2:
+            empiler(pile, noeud);
+            empiler(pile, noeud->fils[1]);
+            noeud = noeud->fils[1];
+            break;
+          case 3:
+          case 4:
+            empiler(pile, noeud);
+            empiler(pile, noeud->fils[0]);
+            noeud = noeud->fils[0];
+            break;
+          case 0:
+            noeud = NULL;
+        }
+      }
     }
-
-    
   }
-
-
 }
 
 Arbre234 getFather(Arbre234 a, int cle){
@@ -697,8 +706,8 @@ int main (int argc, char **argv)
 
     printf ("==== Destruction Cle ====\n") ;
 
-    Detruire_Cle(&a, CleMin(a));
+    //Detruire_Cle(&a, CleMin(a));
 
-    afficher_arbre (a, 0) ;
+    //afficher_arbre (a, 0) ;
 
 }
