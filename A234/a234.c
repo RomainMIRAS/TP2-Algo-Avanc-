@@ -303,10 +303,34 @@ void Afficher_Cles_Largeur (Arbre234 a)
 
 void Affichage_Cles_Triees_Recursive (Arbre234 a)
 {
-  /* 
-     Afficher les cles en ordre croissant
-     Cette fonction sera recursive
-  */
+  if (a->t == 0){
+    return;
+  } else {
+
+    switch (a->t)
+      {
+      case 2:
+        Affichage_Cles_Triees_Recursive(a->fils[1]);
+        printf("Clef %d \n",a->cles[1]);
+        Affichage_Cles_Triees_Recursive(a->fils[2]);
+        break;
+      case 3:
+        Affichage_Cles_Triees_Recursive(a->fils[0]);
+        printf("Clef %d \n",a->cles[0]);
+        Affichage_Cles_Triees_Recursive(a->fils[1]);
+        printf("Clef %d \n",a->cles[1]);
+        Affichage_Cles_Triees_Recursive(a->fils[2]);
+        break;
+      case 4:
+        Affichage_Cles_Triees_Recursive(a->fils[0]);
+        printf("Clef %d \n",a->cles[0]);
+        Affichage_Cles_Triees_Recursive(a->fils[1]);
+        printf("Clef %d \n",a->cles[1]);
+        Affichage_Cles_Triees_Recursive(a->fils[2]);
+        printf("Clef %d \n",a->cles[2]);
+        Affichage_Cles_Triees_Recursive(a->fils[3]);
+    } 
+  }
      
 }
 
@@ -384,5 +408,17 @@ int main (int argc, char **argv)
     printf ("==== Affichage Cles Largeur ====\n") ;
 
     Afficher_Cles_Largeur(a);
+
+    printf ("==== Affichage Cles Triees Recursive ====\n") ;
+
+    Affichage_Cles_Triees_Recursive(a);
+
+    printf ("==== Affichage Cles Triees Non Recursive ====\n") ;
+
+    Affichage_Cles_Triees_NonRecursive(a);
+
+    printf ("==== Destruction Cle ====\n") ;
+
+    //Detruire_Cle(&a, 82);
 
 }
