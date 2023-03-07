@@ -428,14 +428,77 @@ void Affichage_Cles_Triees_NonRecursive (Arbre234 a)
      Utiliser une pile
   */
 
- pfile_t f = creer_file();
+  ppile_t pile = creer_pile();
+  while (a != NULL) {
+    switch(a->t) {
+      case 2:
+      empiler(pile, a);
+      a = a->fils[1];
+      break;
+      case 3:
+      empiler(pile, a);
+      a = a->fils[0];
+      break;
+      case 4:
+      empiler(pile, a);
+      a = a->fils[0];
+      break;
+      case 0:
+      a = NULL;
 
-  enfiler(f,a);
+    }
+  }
 
-  Arbre234 noeud = defiler(f);
+  while (!pile_vide(pile)) {
+    Arbre234 noeud = depiler(pile);
+    Arbre234 temp;
+    
+    switch (noeud->t)
+      {
+      case 2:
+      printf("valeur : %d\n", noeud->cles[1]);
+      temp = noeud->fils[2];
+      empiler(pile,temp);
+        break;
+      case 3:
+      printf("valeur : %d\n", noeud->cles[0]);
+      temp = noeud->fils[2];
+      empiler(pile,temp);
+      temp = noeud->fils[1];
+      empiler(pile,temp);
+        break;
+      case 4:
+      printf("valeur : %d\n", noeud->cles[0]);
+      temp = noeud->fils[3];
+      empiler(pile,temp);
+      temp = noeud->fils[2];
+      empiler(pile,temp);
+      temp = noeud->fils[1];
+      empiler(pile,temp);
+    }
 
-  printf("CL2 :: %ls\n", noeud->cles);
-  return;
+    while (noeud->fils[0] != NULL || noeud->fils[1] != NULL) {
+      switch (noeud->t){
+      case 2:
+      noeud = noeud->fils[1];
+      empiler(pile,noeud);
+      break;
+      case 3:
+      noeud = noeud->fils[0];
+      empiler(pile,noeud);
+      break;
+      case 4:
+      noeud = noeud->fils[0];
+      empiler(pile,noeud);
+      break;
+      }
+      
+    }
+
+    
+  }
+
+
 }
 
 Arbre234 getFather(Arbre234 a, int cle){
