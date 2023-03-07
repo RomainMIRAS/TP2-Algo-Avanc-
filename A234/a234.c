@@ -8,6 +8,7 @@
 #endif
 
 #define MAX_FILE_SIZE       32
+#define MAX_PILE_SIZE       32
 ////////////////////////////////////////////////////////////
 
 /// FILE
@@ -69,6 +70,71 @@ int enfiler (pfile_t f, Arbre234 p)
   f->Tab[f->queue] = p;
   return 0;
 }
+
+
+
+////////////////////////////////////////////////////////////
+
+/// PILE
+
+///////////////////////////////////////////////////////////*
+
+typedef struct {
+  int sommet ;
+  Arbre234 Tab [MAX_PILE_SIZE] ;
+} pile_t, *ppile_t ;
+
+
+ppile_t creer_pile ()
+{
+  ppile_t p = (ppile_t) malloc (sizeof (pile_t));
+  if (p == NULL)
+    return NULL;
+
+  //Set tab à nulle
+  for (int i = 0; i < MAX_PILE_SIZE; i++)
+    p->Tab[i] = NULL;
+  p->sommet = 0;
+  return p;
+}
+
+int detruire_pile (ppile_t p)
+{
+  // Free tab
+  for (int i = 0; i < MAX_PILE_SIZE; i++)
+    free (p->Tab[i]);
+  // Free pile
+
+  free (p);
+  return 0;
+}  
+
+int pile_vide (ppile_t p)
+{
+  return p->sommet == 0;
+}
+
+int pile_pleine (ppile_t p)
+ {
+  return p->sommet == MAX_PILE_SIZE;
+  } 
+
+Arbre234 depiler (ppile_t p)
+{
+  if (pile_vide (p))
+    return NULL;
+  p->sommet--;
+  return p->Tab[p->sommet];
+}
+
+int empiler (ppile_t p, Arbre234 pn)
+  {
+  if (pile_pleine (p))
+    return -1;
+  p->Tab[p->sommet] = pn;
+  p->sommet++;
+  return 0;
+  }
 
 
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -356,6 +422,14 @@ void Affichage_Cles_Triees_NonRecursive (Arbre234 a)
      Utiliser une pile
   */
 
+ pfile_t f = creer_file();
+
+  enfiler(f,a);
+
+  Arbre234 noeud = defiler(f);
+
+  printf("CL2 :: %ls\n", noeud->cles);
+  return;
 }
 
 Arbre234 getFather(Arbre234 a, int cle){
