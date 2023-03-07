@@ -23,3 +23,4 @@ void ajouter_cle (Arbre234 *a, int cle, int niveau, Arbre234 pere) ;
 
 Arbre234 getFather(Arbre234 a, int cle) ;
   
+// Arbre234 Fusion (Arbre234 arbre) ;
