@@ -199,6 +199,11 @@ void AnalyseStructureArbre (Arbre234 a, int *feuilles, int *noeud2, int *noeud3,
 }
 
 int sommeNoeud (Arbre234 a) {
+
+  if (a == NULL) {
+    return 0;
+  }
+
   switch (a->t)
   {
   case 0:
@@ -221,28 +226,37 @@ int sommeNoeud (Arbre234 a) {
 
 Arbre234 noeud_max_worker (Arbre234 a, Arbre234 currentMax, int value) {
 
-  if (a == NULL) {
+  if (a == NULL || a->t == 0) {
     return currentMax;
   }
 
-  if (a->t > 3) { // Ici on gère tout les fils 3
+  if (value < sommeNoeud(a)) {
+    value = sommeNoeud(a);
+    currentMax = a;
+  }
 
+  Arbre234 temp = NULL;
+  Arbre234 temporaire = NULL;
+
+  if (a->t > 3) { // Ici on gère tout les fils 3
+    temp = sommeNoeud(noeud_max_worker(a->fils[3], currentMax, value)) > value ? noeud_max_worker(a->fils[3], currentMax, value): currentMax;
   }
 
   if (a->t > 2) { // Ici on gère tout les fils 0
-
+    temporaire = sommeNoeud(noeud_max_worker(a->fils[0], currentMax, value)) > value ? noeud_max_worker(a->fils[0], currentMax, value): currentMax;
   }
 
-  if (a->t > 0) { // Ici on gère tout les fils 1 et 2
+  temp = sommeNoeud(temp) > sommeNoeud(temporaire) ? temp : temporaire;
 
+  if (a->t > 0) { // Ici on gère tout les fils 1 et 2s
+    Arbre234 temp1 = sommeNoeud(noeud_max_worker(a->fils[1], currentMax, value)) > value ? noeud_max_worker(a->fils[1], currentMax, value): currentMax;
+    Arbre234 temp2 = sommeNoeud(noeud_max_worker(a->fils[2], currentMax, value)) > value ? noeud_max_worker(a->fils[2], currentMax, value): currentMax;
+    temporaire = sommeNoeud(temp1) > sommeNoeud(temp2) ? temp1: temp2;
   }
 
-  if (a->t == 0) {
-    return currentMax;
-  }
+  temp = sommeNoeud(temp) > sommeNoeud(temporaire) ? temp : temporaire;
 
-  return NULL;
-
+  return temp;
 }
 
 Arbre234 noeud_max (Arbre234 a) {
@@ -409,6 +423,7 @@ int main (int argc, char **argv)
 
     Afficher_Cles_Largeur(a);
 
+<<<<<<< HEAD
     printf ("==== Affichage Cles Triees Recursive ====\n") ;
 
     Affichage_Cles_Triees_Recursive(a);
@@ -422,3 +437,6 @@ int main (int argc, char **argv)
     //Detruire_Cle(&a, 82);
 
 }
+=======
+}
+>>>>>>> refs/remotes/origin/main
