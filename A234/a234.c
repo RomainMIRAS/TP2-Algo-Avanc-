@@ -358,6 +358,42 @@ void Affichage_Cles_Triees_NonRecursive (Arbre234 a)
 
 }
 
+Arbre234 getFather(Arbre234 a, int cle){
+  if (a->t == 0){
+    return NULL;
+  } else {
+    switch (a->t)
+      {
+      case 2:
+        if (cle == a->cles[1]){
+          return a;
+        } else {
+          return getFather(a->fils[1],cle) != NULL ? getFather(a->fils[1],cle) : getFather(a->fils[2],cle);
+        }
+        break;
+      case 3:
+        if (cle == a->cles[0]){
+          return a;
+        } else if (cle == a->cles[1]){
+          return a;
+        } else {
+          return getFather(a->fils[0],cle) != NULL ? getFather(a->fils[0],cle) : getFather(a->fils[1],cle) != NULL ? getFather(a->fils[1],cle) : getFather(a->fils[2],cle);
+        }
+        break;
+      case 4:
+        if (cle == a->cles[0]){
+          return a;
+        } else if (cle == a->cles[1]){
+          return a;
+        } else if (cle == a->cles[2]){
+          return a;
+        } else {
+          return getFather(a->fils[0],cle) != NULL ? getFather(a->fils[0],cle) : getFather(a->fils[1],cle) != NULL ? getFather(a->fils[1],cle) : getFather(a->fils[2],cle) != NULL ? getFather(a->fils[2],cle) : getFather(a->fils[3],cle);
+        }
+    } 
+  }
+}
+
 
 void Detruire_Cle (Arbre234 *a, int cle)
 {
