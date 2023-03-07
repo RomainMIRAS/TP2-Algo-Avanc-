@@ -423,7 +423,6 @@ int main (int argc, char **argv)
 
     Afficher_Cles_Largeur(a);
 
-<<<<<<< HEAD
     printf ("==== Affichage Cles Triees Recursive ====\n") ;
 
     Affichage_Cles_Triees_Recursive(a);
@@ -437,6 +436,3 @@ int main (int argc, char **argv)
     //Detruire_Cle(&a, 82);
 
 }
-=======
-}
->>>>>>> refs/remotes/origin/main
