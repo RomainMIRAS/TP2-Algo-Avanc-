@@ -424,52 +424,35 @@ int filsDroit(Arbre234 a) {
   return a->t == 2 || a->t == 3 ? 2 : 3;
 }
 
+int filsGauche(Arbre234 a) {
+  return a->t == 3 || a->t == 4 ? 0 : 1;
+}
+
 void printAllCle(Arbre234 a) {
-  switch (a->t) {
-    case 2:
+  if (a->t == 2)
       printf("valeur : %d\n", a->cles[1]);
-      break;
-    case 3:
-    case 4:
+  else if (a->t >= 3)
     for (int i = 0; i < a->t - 1; i++)
       printf("valeur : %d\n", a->cles[i]);
-  }
 }
 
 void Affichage_Cles_Triees_NonRecursive (Arbre234 a) {
   int max = CleMax(a);
   ppile_t pile = creer_pile();
+  int finished = 0;
+  Arbre234 previous;
 
-  while (a != NULL) {
-    switch(a->t) {
-      case 2:
-        empiler(pile, a);
-        a = a->fils[1];
-        break;
-      case 3:
-      case 4:
-        empiler(pile, a);
-        a = a->fils[0];
-        break;
-      case 0:
-        a = NULL;
-    }
+  while (a->t != 0) {
+    empiler(pile, a);
+    a = a->fils[filsGauche(a)];
   }
 
-  int decalageDroite;
-  int finished = 0;
-
-  Arbre234 previous;
   Arbre234 noeud = depiler(pile);
-  
   printAllCle(noeud);
 
   while (!pile_vide(pile) && !finished) {
     previous = noeud;
     noeud = depiler(pile);
-
-    decalageDroite = 0;
-
     if (previous->cles[previous->t-2] == max) {
       finished = 1;
       printAllCle(noeud);
@@ -483,29 +466,13 @@ void Affichage_Cles_Triees_NonRecursive (Arbre234 a) {
         empiler(pile, noeud);
         empiler(pile,noeud->fils[filsVisee+1]);
         noeud = noeud->fils[filsVisee+1];
-        decalageDroite = 1;
-      } else {
-        if (noeud->fils[filsDroit(noeud)] != previous)
-          printAllCle(noeud);
-      }
-      
-      while (noeud->fils[1]->t != 0 && decalageDroite) {
-        switch(noeud->t) {
-          case 2:
-            empiler(pile, noeud);
-            empiler(pile, noeud->fils[1]);
-            noeud = noeud->fils[1];
-            break;
-          case 3:
-          case 4:
-            empiler(pile, noeud);
-            empiler(pile, noeud->fils[0]);
-            noeud = noeud->fils[0];
-            break;
-          case 0:
-            noeud = NULL;
+        while (noeud->fils[1]->t != 0) {
+          empiler(pile, noeud);
+          empiler(pile, noeud->fils[filsGauche(noeud)]);
+          noeud = noeud->fils[filsGauche(noeud)];
         }
-      }
+      } else if (noeud->fils[filsDroit(noeud)] != previous)
+          printAllCle(noeud);
     }
   }
 }
